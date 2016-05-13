@@ -30,6 +30,7 @@ public class MainActivity extends Activity implements SensorEventListener {
     private float rate;
     private int accuracy;
     private long prevts;
+    private final static float alpha = 0.8F;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,13 +73,19 @@ public class MainActivity extends Activity implements SensorEventListener {
         sensorMgr.unregisterListener(this);
     }
 
+
+
     @Override
     public void onSensorChanged(SensorEvent event) {
-        vx = event.values[0];
+       // vx = event.values[0];
+        vx = alpha * vx + (1-alpha)*event.values[0];
         vy = event.values[1];
         vz = event.values[2];
         rate = ((float) (event.timestamp - prevts)) / (1000 * 1000);
         prevts = event.timestamp;
+
+       // final float[] ev= event.values;
+        //Log.i(TAG, "ax="+ev[0]+ ", ay=" + ev[1]+ ", az=" +ev[2]);
     }
 
     @Override
